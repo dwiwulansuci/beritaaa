@@ -1,9 +1,15 @@
 {{-- resources/views/news/index.blade.php --}}
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Daftar Berita Terbaru') }}
-        </h2>
+        <div class="flex items-center justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Daftar Berita Terbaru') }}
+            </h2>
+            <a href="{{ route('news.create') }}"
+               class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded text-sm">
+                + Tambah Berita
+            </a>
+        </div>
     </x-slot>
 
     <div class="py-12">
@@ -22,8 +28,7 @@
                     @if($news->count())
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             @foreach($news as $item)
-                                <div
-                                    class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
 
                                     {{-- Gambar --}}
                                     @if($item->image)
@@ -68,7 +73,7 @@
                                                 @method('DELETE')
                                                 <button type="submit"
                                                         class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded text-sm">
-                                                    Delete
+                                                    Hapus
                                                 </button>
                                             </form>
                                         </div>
@@ -91,6 +96,7 @@
                             </p>
                         </div>
                     @endif
+
                 </div>
             </div>
         </div>
