@@ -1,42 +1,50 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-use App\Models\News;
+use App\Http\Controllers\NewsController;
+
+/*
+|--------------------------------------------------------------------------
+| WEB ROUTES – Manajemen Berita
+|--------------------------------------------------------------------------
+
+  Struktur:
+    GET   /                 -> daftar berita (homepage)
+    GET   /news             -> daftar berita (URL konvensional)
+    GET   /news/create      -> form tambah
+    POST  /news             -> simpan data baru
+    GET   /news/{news}      -> detail berita
+    GET   /news/{news}/edit -> form edit
+    PUT   /news/{news}      -> update data
+    DELETE /news/{news}     -> hapus data
+*/
 
 /* ──────────────────────────────────────────
-|  HALAMAN UTAMA – Daftar Berita
+|  1.  HALAMAN UTAMA  (Daftar Berita)
 | ────────────────────────────────────────── */
-Route::get('/', function () {
-    $news = News::latest()->get();
-    return view('welcome', compact('news'));
-});
+Route::get('/',               [NewsController::class, 'index'])->name('home');
+
+/* (Opsional) URL kedua untuk daftar yang lebih “RESTful” */
+Route::get('/news',           [NewsController::class, 'index'])->name('news.index');
 
 /* ──────────────────────────────────────────
-|  TAMBAH BERITA (publik)
+|  2.  TAMBAH BERITA
 | ────────────────────────────────────────── */
-Route::view('/tambah-berita', 'form-tambah')->name('form.tambah');
+Route::get('/news/create',    [NewsController::class, 'create'])->name('news.create');
+Route::post('/news',          [NewsController::class, 'store'])->name('news.store');
 
-Route::post('/tambah-berita', function (Request $request) {
-    $request->validate([
-        'title'        => 'required|string|max:255',
-        'content'      => 'required|string',
-        'author'       => 'required|string|max:100',
-        'image'        => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        'published_at' => 'required|date',
-    ]);
+/* ──────────────────────────────────────────
+|  3.  DETAIL BERITA
+| ────────────────────────────────────────── */
+Route::get('/news/{news}',    [NewsController::class, 'show'])->name('news.show');
 
-    $path = $request->file('image')
-        ? $request->file('image')->store('news_images', 'public')
-        : null;
+/* ──────────────────────────────────────────
+|  4.  EDIT BERITA
+| ────────────────────────────────────────── */
+Route::get('/news/{news}/edit', [NewsController::class, 'edit'])->name('news.edit');
+Route::put('/news/{news}',      [NewsController::class, 'update'])->name('news.update');
 
-    News::create([
-        'title'        => $request->title,
-        'content'      => $request->content,
-        'author'       => $request->author,
-        'image'        => $path,
-        'published_at' => $request->published_at,
-    ]);
-
-    return redirect('/')->with('success', 'Berita berhasil ditambahkan!');
-})->name('news.store');
+/* ──────────────────────────────────────────
+|  5.  HAPUS BERITA
+| ────────────────────────────────────────── */
+Route::delete('/news/{news}', [NewsController::class, 'destroy'])->name('news.destroy');
