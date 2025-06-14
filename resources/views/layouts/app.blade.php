@@ -4,9 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    {{-- Judul halaman --}}
+    <title>Berita</title>
 
-    {{-- ===== Tailwind CSS via CDN (tidak perlu Vite) ===== --}}
+    {{-- ===== Tailwind CSS via CDN ===== --}}
     <script src="https://cdn.tailwindcss.com?plugins=line-clamp"></script>
 
     {{-- (Opsional) Google Font Inter --}}
@@ -14,15 +15,22 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 
-    {{-- (Opsional) file CSS lokal, kalau kamu punya --}}
+    {{-- (Opsional) file CSS lokal --}}
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body class="font-sans antialiased bg-gray-100">
 
-    {{-- ===== Navbar / menu (include jika ada) ===== --}}
-    @includeIf('layouts.navigation')
+    {{-- ===== Navbar (jika ingin ditambahkan) ===== --}}
+    {{-- <nav class="bg-white shadow">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="{{ route('home') }}" class="text-xl font-bold text-blue-600">Berita</a>
+            <div>
+                <a href="{{ route('news.create') }}" class="text-sm text-blue-500 hover:underline">Tambah Berita</a>
+            </div>
+        </div>
+    </nav> --}}
 
-    {{-- ===== Judul halaman (slot header) ===== --}}
+    {{-- ===== Judul halaman dari slot $header ===== --}}
     @isset($header)
         <header class="bg-white shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -36,7 +44,7 @@
         {{ $slot }}
     </main>
 
-    {{-- ===== Alpine.js via CDN (dipakai Jetstream/Breeze) ===== --}}
+    {{-- Alpine.js (dipakai untuk interaksi kecil) --}}
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     {{-- (Opsional) JS lokal --}}
